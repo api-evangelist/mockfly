@@ -1,0 +1,16 @@
+generated: '2026-10-21'
+method: none
+source:
+- https://zapier.com/apps/mockfly/integrations
+- https://n8n.io/integrations/mockfly/
+- https://composio.dev/toolkits/mockfly
+- https://monid.ai/tools/mockfly
+checked:
+- https://composio.dev/toolkits/mockfly
+- https://monid.ai/tools/mockfly
+- https://n8n.io/integrations/mockfly/
+- https://zapier.com/apps/mockfly/integrations
+summary: null
+marketplace_apps: []
+edges: []
+templates: []

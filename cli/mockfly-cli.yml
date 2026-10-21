@@ -1,4 +1,4 @@
-generated: '2026-10-20'
+generated: '2026-10-21'
 method: searched
 generator: extract-docs-artifacts.py (local)
 source: https://mockfly.dev/docs/offline-mock-api-cli/
@@ -9,22 +9,34 @@ sources:
 - https://mockfly.dev/compare/
 install:
 - method: npx
-  command: npx mockfly-cli
+  command: npx mockfly-cli login
+- method: npx
+  command: npx mockfly-cli pull
+- method: npx
+  command: npx mockfly-cli serve
 - method: npm
   command: npm install -g mockfly-cli
 commands:
-- group: auth
+- group: login
   commands:
-  - login
-  - whoami
-  - logout
-- group: project
+  - mockfly login [--key <mf_…>]
+- group: pull
   commands:
-  - pull
-  - list
-  - rm
+  - mockfly pull [projects...]
 - group: serve
   commands:
-  - serve
+  - mockfly serve [--port 4000]
+- group: list
+  commands:
+  - mockfly list
+- group: rm
+  commands:
+  - mockfly rm <project>
+- group: whoami
+  commands:
+  - mockfly whoami
+- group: logout
+  commands:
+  - mockfly logout
 binary: mockfly
 docs: https://mockfly.dev/docs/offline-mock-api-cli/

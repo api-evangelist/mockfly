@@ -1,0 +1,17 @@
+generated: '2026-10-21'
+method: searched
+generator: extract-docs-artifacts.py (local)
+source: https://mockfly.dev/docs/
+sources:
+- https://mockfly.dev/docs/
+- https://mockfly.dev/articles/getting-started-with-mockfly/
+- https://mockfly.dev/docs
+description: Mockfly uses an account API key for authentication.
+schemes:
+- type: apiKey
+  name: Account API Key
+  evidence: To add endpoints with the chrome extension or the public API , use an account API key from app.mockfly.dev/api-keys .
+  location: header
+  header: Authorization
+  how_to_obtain: Generate an API key in the Mockfly dashboard at app.mockfly.dev/api-keys.
+docs: https://mockfly.dev/docs/

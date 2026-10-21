@@ -1,0 +1,30 @@
+generated: '2026-10-21'
+method: derived
+generator: derive-vocabulary.py
+source: openapi/mockfly-openapi.json
+vocabulary:
+  name: Mockfly Domain Vocabulary
+  description: 'Terms declared by Mockfly''s own API contract: its resource groups, objects and enumerations, with the contract''s definitions.
+    Derived, not authored.'
+  version: '2026-10-21'
+  terms:
+  - term: Projects
+    definition: Account-level operations on projects. Authenticated with the account API key.
+    tags:
+    - Resource Group
+    source: openapi/mockfly-openapi.json
+  - term: Endpoints
+    definition: Operations on the endpoints of a project. Authenticated with the account API key.
+    tags:
+    - Resource Group
+    source: openapi/mockfly-openapi.json
+  - term: Responses
+    definition: Operations on the mock responses of an endpoint, including their conditional rules.
+    tags:
+    - Resource Group
+    source: openapi/mockfly-openapi.json
+  - term: API Hub
+    definition: Free public mock APIs. No authentication required.
+    tags:
+    - Resource Group
+    source: openapi/mockfly-openapi.json

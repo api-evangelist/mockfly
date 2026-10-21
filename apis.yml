@@ -1,11 +1,17 @@
 aid: mockfly
 name: Mockfly
-description: 'Mockfly provides a lightweight, developer-friendly API platform that enables rapid creation, testing, and deployment of mock APIs for developers and QA teams. The service offers customizable endpoints, dynamic response generation, and seamless integration with CI/CD pipelines, helping teams accelerate development cycles and improve testing reliability. Mockfly’s intuitive dashboard and extensive documentation empower users to simulate complex API behaviors without building full backends, reducing overhead and speeding time‑to‑market.'
+image: https://mockfly.dev/assets/logo.png
+description: Mockfly provides a lightweight, developer‑friendly API platform that enables rapid creation, testing, and deployment of mock APIs
+  for developers and QA teams. The service offers customizable endpoints, dynamic response generation, and seamless integration with CI/CD pipelines,
+  helping teams accelerate development cycles and improve testing reliability. Mockfly’s intuitive dashboard and extensive documentation empower
+  users to simulate complex API behaviors without building full backends, reducing overhead and speeding time‑to‑market. It supports import of
+  OpenAPI, Postman collections, and HAR files, offers AI‑generated mock data, conditional response rules, custom domains, and real‑time analytics,
+  making it a comprehensive solution for modern API development and testing workflows.
 url: https://raw.githubusercontent.com/api-evangelist/mockfly/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:g2-catalog
-x-tier: stub
-x-tier-reason: harvest
+x-tier: profiled
+x-tier-reason: enrichment pass 2026-10-21 (modular-v1; was harvest)
 specificationVersion: '0.20'
 created: '2026-10-20'
 modified: '2026-10-20'
@@ -15,20 +21,30 @@ tags:
 - Developer Tools
 - Testing
 - CI/CD Integration
-apis:
-  - name: Mockfly Public API
-    description: "Manage Mockfly mock projects, endpoints and responses programmatically."
-    humanURL: https://mockfly.dev/docs/public-api/
-    baseURL: https://api.mockfly.dev
-    openapi:
-      url: openapi/mockfly-openapi.json
-      type: OpenAPI
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Plans
+  url: plans/mockfly-plans-pricing.yml
+- type: Vocabulary
+  url: vocabulary/mockfly-vocabulary.yml
+- type: CLI
+  url: cli/mockfly-cli.yml
+- type: Authentication
+  url: authentication/mockfly-authentication.yml
+- type: Conformance
+  url: conformance/mockfly-conformance.yml
+- type: Overlay
+  url: overlays/mockfly-openapi-overlay.yaml
+- type: LLMsTxt
+  url: llms/mockfly-llms.txt
+- type: Hosts
+  url: hosts/mockfly-hosts.yml
+- type: Vendors
+  url: vendors/mockfly-vendors.yml
 - type: DomainSecurity
   url: security/mockfly-domain-security.yml
 - type: Website
@@ -37,8 +53,6 @@ common:
   url: https://mockfly.dev/
 - type: Documentation
   url: https://mockfly.dev/docs/
-- type: APIReference
-  url: https://mockfly.dev/public-api/
 - type: GettingStarted
   url: https://mockfly.dev/articles/getting-started-with-mockfly/
 - type: Pricing
@@ -47,7 +61,17 @@ common:
   url: https://mockfly.dev/articles/
 - type: Support
   url: https://mockfly.dev/faq/
-
-
 - type: Postman
   url: https://www.postman.com/organization/mockfly-workspace
+apis:
+- name: Mockfly Public API
+  description: Manage Mockfly mock projects, endpoints and responses programmatically.
+  humanURL: https://mockfly.dev/docs/public-api/
+  baseURL: https://api.mockfly.dev
+  aid: mockfly:mockfly-public-api
+x-enrichment:
+  date: '2026-10-21'
+  status: enriched
+  artifacts_added: 11
+  pass: modular-v1
+  engine: identity=local,contract=local,surfaces=local,docs=local,regulatory=local

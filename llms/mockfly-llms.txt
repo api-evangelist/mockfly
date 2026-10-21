@@ -1,0 +1,130 @@
+# Mockfly
+
+> Hosted mock API generator: define HTTP endpoints and their JSON/XML responses in a web app and get a live URL in
+> seconds — no server to write, no deploy. Free tier, no credit card. Everything is also drivable from code: a public
+> REST API, an MCP server, an offline CLI, and a set of zero-auth public mock APIs (the API Hub).
+
+## When to use Mockfly
+
+- You need an HTTP endpoint that returns a specific body and status code right now, and writing/hosting a server for it is not worth it.
+- You need to reproduce an error path the real API will not produce on demand: 500, 429, 404, a malformed body, or a slow response (per-endpoint delay).
+- You need realistic fake data instead of hand-written fixtures: Faker.js placeholders re-evaluated on every request, or a JSON body generated from a plain-English prompt.
+- You need one endpoint to answer differently depending on the request — conditional rules match on query params, headers, request body, JSONPath expressions, XML tag or XPath, with 16 comparators (equal, contains, regex, greaterThan, exists…) and AND/OR groups nested up to 3 levels.
+- You need the response body to echo the request: URL params, body fields, request headers, search params or project env vars substituted into the response.
+- You need a mock that returns a binary file (PDF, CSV, XLSX) so a download flow can be tested end to end.
+- You need a mock WebSocket endpoint: on-connect message, rule-based replies, broadcasting, live logs.
+- You need a public fake REST API for a demo, a tutorial or a code sample, with no signup and no key → use the API Hub (`https://api.mockfly.dev/hub/*`).
+- You are wiring a frontend or e2e suite in CI and want the mocks created from a script and versioned → use the Public API, or `import_project` over MCP.
+- You need the mocks to answer with no network at all (plane, air-gapped CI) → pull them once with the offline CLI and serve them from localhost.
+- You want to mock only part of an API and let the rest hit the real backend → proxy mode, switchable per endpoint.
+- You want the mock reachable on your own hostname (`api-mock.yourcompany.com`, TLS included) so an app, SDK or mobile build swaps between the mock and the real backend with a DNS change and no `/mocks/<namespace>` prefix → custom domains, Pro and Team plans, one per project.
+
+## When NOT to use Mockfly
+
+- You want to intercept requests in-process inside a test runner, with no network hop — use msw, nock or your framework's own stubbing instead.
+- You need a real stateful backend: writes that persist, business logic, auth flows, a database. Mockfly responses are configured, not computed; API Hub writes are simulated and nothing is stored.
+- You need high-volume load testing. The free plan is 500 requests/day; even on paid plans this is a mocking service, not a load target.
+- You need to record and replay real production traffic as a fixture corpus. The Chrome extension captures single requests into endpoints; it is not a VCR-style proxy recorder.
+
+## How an agent should call Mockfly
+
+- **Public REST API** — base `https://api.mockfly.dev`, routes under `/public/*`. Auth is the `Authorization` header with the
+  API key as its **raw value — no `Bearer` prefix**. One key type: the *account* key (`mf_…`, from
+  https://app.mockfly.dev/api-keys), valid for every operation on every project the account is a member of.
+  - `GET|POST /public/projects`, `POST /public/projects/import`, `PATCH|DELETE /public/projects/:projectId`.
+  - `GET|POST /public/endpoints`, `GET|PATCH|DELETE /public/endpoints/:endpointId`, `POST /public/endpoints/:endpointId/responses`,
+    `PATCH|DELETE /public/endpoints/:endpointId/responses/:responseId`, `POST …/duplicate`, `PUT …/rules`.
+    `GET /public/endpoints` needs `?projectId=<id>` and `POST /public/endpoints` needs `projectId` in the body (ids from `GET /public/projects`).
+  - Errors are JSON `{"error": "…"}`. 401 bad key, 400 invalid payload or not found, 403 not project admin, 429 plan limit.
+  - Free plan limits apply through the API too: 1 project as admin, 4 endpoints per project, 2 responses per endpoint, 500 requests/day.
+  - Custom domains are managed from the web app (project settings), not from the public API: add the hostname, CNAME it to `edge.mockfly.dev`, verify. Docs: https://mockfly.dev/docs/custom-domains/
+  - Docs: https://mockfly.dev/docs/public-api/ · Runnable collection: https://documenter.getpostman.com/view/15114778/2sB34ZqPKm
+- **MCP server** — `npx -y mockfly-mcp-client`, configured with `MOCKFLY_API_KEY` set to an account key (`mf_…`). Tools:
+  `list_projects`, `create_project`, `import_project`, `update_project`, `delete_project`, `get_endpoints` (takes a
+  `projectId`), `get_endpoint_detail`, `create_endpoint`, `edit_endpoint`, `delete_endpoint`, `create_response`,
+  `edit_response`, `duplicate_response`, `delete_response`, `modify_rules`. Docs: https://mockfly.dev/docs/mockfly-mcp-client/
+- **Offline CLI** — `npx mockfly-cli login` → `npx mockfly-cli pull` (snapshots projects to `~/.mockfly/projects`) →
+  `npx mockfly-cli serve` (default port 4000, no internet needed). Snapshots are read-only; edit mocks in the web app and
+  `pull` again. Docs: https://mockfly.dev/docs/offline-mock-api-cli/
+- **API Hub — no auth, no signup.** Machine-readable catalog: `GET https://api.mockfly.dev/hub/catalog`. Resources:
+  `/hub/users`, `/hub/products`, `/hub/posts`, `/hub/comments`, `/hub/albums`, `/hub/photos`, `/hub/todos`, plus nested
+  routes (`/hub/users/:id/posts`, `/hub/posts/:id/comments`, `/hub/albums/:id/photos`, …). Data is deterministic —
+  `/hub/users/5` always returns the same user. Shared query params: `_page`, `_limit` (default 10, max 50), `_delay` (ms,
+  max 3000), `_status` (force a status code, e.g. `_status=500` to test error handling). Relation filters where they apply:
+  `?userId=`, `?postId=`, `?albumId=`, `?completed=`. Writes (POST/PUT/PATCH/DELETE) are simulated and persist nothing. Docs: https://mockfly.dev/api-hub/
+- **Where to sign up / get keys** — app: https://app.mockfly.dev · API keys: https://app.mockfly.dev/api-keys
+
+## Docs
+
+- [Public API](https://mockfly.dev/docs/public-api/): manage projects, endpoints and responses programmatically over REST.
+- [Mockfly MCP Client](https://mockfly.dev/docs/mockfly-mcp-client/): manage your Mockfly endpoints and responses from any MCP-compatible client (Claude, Cursor, Antigravity).
+- [Offline CLI](https://mockfly.dev/docs/offline-mock-api-cli/): pull your projects with the `mockfly-cli` npm package and serve them locally without internet — same rules, Faker templating and placeholders as production.
+- [Getting started](https://mockfly.dev/docs/): sign in, create a project, configure endpoints and responses, invite teammates, read logs.
+- [Chrome Extension](https://mockfly.dev/docs/chrome-extension/): capture requests from a real API in DevTools and add them to your project in one click.
+- [Random Data with Faker.js](https://mockfly.dev/docs/random-data-generation-with-faker-js/): Faker.js placeholders in response bodies for realistic, always-fresh data — including date handling.
+- [Dynamic Body Substitution](https://mockfly.dev/docs/dynamic-response-body-substitution/): inject URL params, request body, request headers, env vars or search params into the response. Supports XPath and value filters.
+- [Conditional Responses](https://mockfly.dev/docs/conditional-response-mock-api/): return a different response for the same endpoint based on query params, headers, body, JSONPath, XML tag or XPath rules — 16 comparators and AND/OR groups included.
+- [Request Flow Diagram](https://mockfly.dev/docs/mock-api-request-flow/): the Flow tab draws how an endpoint resolves a request — proxy, disabled responses, random pick, every rule in order and the default response — and dims the branches the current configuration cannot reach.
+- [Callbacks (Outgoing Webhooks)](https://mockfly.dev/docs/callbacks/): attach outgoing webhooks to a response — own URL (it can come from the request, e.g. `{{body.callbackUrl}}`), method, headers, JSON body, delay up to 24h, up to 5 retries with backoff, HMAC-SHA256 signature in `x-mockfly-signature`, and a delivery history with manual retry. Public destinations only. Pro and Team.
+- [Custom Response Headers](https://mockfly.dev/docs/custom-headers-mock-api/): serve custom response headers per endpoint, including headers with randomly generated values.
+- [Dynamic Routes](https://mockfly.dev/docs/dynamic-routes-mock-api/): define URL parameters like `/users/:id` and use them in the response.
+- [JSON and XML Support](https://mockfly.dev/docs/mock-api-with-json-and-xml-support/): serve JSON or XML, switched through the content-type header.
+- [Import Project from JSON](https://mockfly.dev/docs/import-project-from-json/): full payload structure for creating a whole project — endpoints, responses, rules, headers — from one JSON file.
+- [Import from OpenAPI / Swagger](https://mockfly.dev/docs/import-openapi-to-mock-api/): turn an OpenAPI 3.x or Swagger 2.0 spec into a mock project — paste it, upload the file or give Mockfly its URL, and every path, response, tag and schema is mapped for you.
+- [Import from Postman](https://mockfly.dev/docs/import-postman-collection-to-mock-api/): turn a Postman collection v2.1 into a mock project — every request becomes an endpoint, each saved example a response, folders are kept and the collection's variables become environment variables.
+- [Import from a HAR capture](https://mockfly.dev/docs/import-har-to-mock-api/): record real API traffic in the browser network tab and import the HAR — each captured request becomes an endpoint with the status code and response body the server actually returned, filtered by domain.
+- [File Mocking (PDF / CSV)](https://mockfly.dev/docs/file-mocking/): endpoints that return binary files such as PDFs and CSVs.
+- [Generate Mock Data with AI](https://mockfly.dev/docs/generate-mock-api-data-with-AI/): type `//` in the body editor, describe what you need in plain English, get realistic JSON back.
+- [Automatic API Documentation](https://mockfly.dev/docs/automatic-documentation-generation/): auto-generated shareable docs from your mock endpoints, with paths, methods, headers and response samples.
+- [Switch Between Mock and Real API](https://mockfly.dev/docs/switch-between-mock-api-server-and-real-api/): run mocks and a proxy to the real API side by side, switchable per endpoint without touching your app config.
+- [Custom Domains](https://mockfly.dev/docs/custom-domains/): serve the mocks on your own hostname (api-mock.yourcompany.com) with a managed TLS certificate — add the domain, CNAME it to edge.mockfly.dev, verify, and the mocks answer without the /mocks/namespace prefix. Pro and Team.
+- [WebSocket Mocking](https://mockfly.dev/docs/websocket-mocking/): mock WebSocket endpoints with rule-based responses, on-connect messages, broadcasting and real-time logs.
+
+## API Hub (free public mock APIs, no key)
+
+- [API Hub overview](https://mockfly.dev/api-hub/): ready-to-use fake REST APIs with deterministic data, pagination and simulated errors. No signup, no setup.
+- [Users](https://mockfly.dev/api-hub/users/): 100 users with names, emails, avatars, addresses and companies. `/hub/users`.
+- [Products](https://mockfly.dev/api-hub/products/): 100 e-commerce products with prices, stock, ratings, categories and images. `/hub/products`.
+- [Posts](https://mockfly.dev/api-hub/posts/): 100 blog posts with titles, bodies, tags and likes, linked to users. `/hub/posts`.
+- [Comments](https://mockfly.dev/api-hub/comments/): 500 comments linked to posts — filter by post or use `/hub/posts/:id/comments`.
+- [Albums](https://mockfly.dev/api-hub/albums/): 100 photo albums linked to users; browse each one with `/hub/albums/:id/photos`.
+- [Photos](https://mockfly.dev/api-hub/photos/): 500 photos with real placeholder images and thumbnails, linked to albums.
+- [Todos](https://mockfly.dev/api-hub/todos/): 200 todos with completion state, priority and due dates, linked to users. Filter with `?completed=true`.
+
+## Product
+
+- [Mockfly](https://mockfly.dev/): landing page — create a mock API in seconds and test your frontend without backend dependencies.
+- [Pricing](https://mockfly.dev/pricing/): free Starter plan (500 requests/day, 1 project, 4 endpoints, 2 responses per endpoint); Pro (15€/month) with unlimited usage and AI JSON generation; Team (49€/month, 5 seats included, 9€ per extra seat) to invite anyone to your projects; Company (from 199€/month) with the setup done for you.
+- [Mockfly for Teams](https://mockfly.dev/for-teams/): shared mock APIs for development teams — real-time collaboration and parallel frontend/backend work.
+- [FAQ](https://mockfly.dev/faq/): what a mock API is, how to create one for free, pricing, data generation, testing your frontend.
+
+## Guides
+
+- [Articles index](https://mockfly.dev/articles/): tutorials and guides about API mocking.
+- [What is API Mocking?](https://mockfly.dev/articles/api-mocking-with-mockfly/): what it is, when to use it, and why it unblocks frontend teams.
+- [Getting Started with Mockfly](https://mockfly.dev/articles/getting-started-with-mockfly/): sign up, create a project, define endpoints, consume the mock.
+- [How to Create a CRUD Mock API](https://mockfly.dev/articles/how-to-create-a-crud-mock-api/): a full create/read/update/delete mock with dynamic responses and path parameters.
+- [Dynamic Mock API Responses](https://mockfly.dev/articles/mock-dynamic-api-responses-custom-rules/): worked examples of returning different responses by query param, header or body — contains and regex comparators, and AND/OR groups.
+- [Realistic Sample Data with Faker.js](https://mockfly.dev/articles/generating-realistic-sample-data-with-faker-js-and-mockfly-for-api-testing/): names, emails, addresses, dates and more.
+- [Mock an API That Returns a PDF or CSV](https://mockfly.dev/articles/mock-api-to-return-pdf-or-csv/): serve binary files and download them from the frontend.
+- [How to Mock API Calls in React](https://mockfly.dev/articles/react-mock-api-calls/): hardcoded fixtures, MSW, json-server and a hosted mock server compared, with fetch and Axios code, env-based switching and error-state testing.
+- [Create a Mock Server From an Existing API](https://mockfly.dev/articles/create-mock-server-using-existing-api/): capture traffic from a real API with the Chrome extension and turn it into a mock.
+- [Develop Faster With Mock APIs](https://mockfly.dev/articles/how-to-develop-faster-using-mock-apis/): testing errors, payloads, latencies and edge cases without waiting for the backend.
+- [Why Use a Tool for API Mocking](https://mockfly.dev/articles/why-you-should-use-a-tool-for-api-mocking/): the case against hardcoded fixtures and ad-hoc scripts.
+- [Enhancing API Mocking with AI](https://mockfly.dev/articles/ai-json-generation-mockfly/): generating realistic JSON responses from a natural-language prompt.
+- [Redefining API Mocking with AI](https://mockfly.dev/articles/ai-powered-api-mocking/): generating schemas, responses and edge cases without hand-writing JSON.
+- [The 8 Best Mock API Tools in 2026](https://mockfly.dev/articles/top-5-mock-api-tools/): Mockfly, Mockoon, Postman, Beeceptor, WireMock, MockAPI, MSW and Prism compared on free tier, pricing, hosting and team features.
+
+## Comparisons
+
+- [Compare mock API tools](https://mockfly.dev/compare/): Mockfly against other mock API tools, side by side.
+- [vs Mockoon](https://mockfly.dev/compare/alternative-to-mockoon/): cloud-hosted instead of a desktop app — team collaboration and AI JSON generation, no install.
+- [vs Postman Mock Server](https://mockfly.dev/compare/alternative-to-postman-mock-server/): faster setup, free Starter plan, mocking-first feature set.
+- [vs Beeceptor](https://mockfly.dev/compare/alternative-to-beeceptor/): AI-powered JSON generation, Faker.js, team plans and dynamic rules.
+- [vs WireMock](https://mockfly.dev/compare/alternative-to-wiremock/): no code and no JVM — instant setup through a web interface.
+- [vs MockAPI](https://mockfly.dev/compare/alternative-to-mockapi/): conditional responses, AI generation and real-time team collaboration.
+- [vs MSW](https://mockfly.dev/compare/alternative-to-msw/): Mock Service Worker intercepts requests in your app; Mockfly is a hosted URL anyone can call. When to use each and how to combine them.
+- [vs Stoplight Prism](https://mockfly.dev/compare/alternative-to-prism/): Prism mocks an OpenAPI spec from the CLI with request validation; Mockfly imports the same spec into a hosted project with a UI, rules and logs.
+- [vs JSONPlaceholder](https://mockfly.dev/compare/alternative-to-jsonplaceholder/): the API Hub keeps the same resources and adds products, pagination, `_status` and `_delay`. Swap the base URL.
+- [vs Mockable.io](https://mockfly.dev/compare/alternative-to-mockable-io/): Mockable does not resolve at the time of writing; what it offered and how to migrate to Mockfly in ten minutes.
+- [vs Mocky](https://mockfly.dev/compare/alternative-to-mocky/): one static URL per mock versus a project with several endpoints, rules, realistic data and team editing.
