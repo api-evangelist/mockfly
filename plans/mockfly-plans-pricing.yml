@@ -1,0 +1,27 @@
+generated: '2026-10-20'
+method: searched
+generator: extract-docs-artifacts.py (local)
+source: https://mockfly.dev/pricing/
+sources:
+- https://mockfly.dev/pricing/
+name: Mockfly pricing
+audience: business-product
+pricing_basis: per-seat
+plans:
+- name: Starter
+  price_text: 0€ per month
+  price: 0
+  description: Free. 500 requests per day, 1 project, 4 endpoints, 2 responses per endpoint
+- name: Pro
+  price_text: 15€ per month
+  price: 15
+  description: Unlimited requests, projects, endpoints, responses per endpoint, custom domain, callbacks, AI generation
+- name: Team
+  price_text: 49€ per month · 5 seats
+  price: 49
+  description: Everything in Pro, for every seat, 5 seats included, extra seats 9€ a month per seat, priority support
+- name: Company
+  price_text: From 199€ per month
+  price: 199
+  description: Everything in Team, setup done for you, centralized billing, custom seats, integrations, SLA, direct line
+docs: https://mockfly.dev/pricing/

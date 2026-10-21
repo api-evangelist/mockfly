@@ -1,7 +1,6 @@
 aid: mockfly
 name: Mockfly
-description: 'Mockfly is a company surfaced via the API Evangelist harvest backlog (source: g2-catalog)
-  and added to the network as a stub for full-pipeline profiling.'
+description: 'Mockfly provides a lightweight, developer-friendly API platform that enables rapid creation, testing, and deployment of mock APIs for developers and QA teams. The service offers customizable endpoints, dynamic response generation, and seamless integration with CI/CD pipelines, helping teams accelerate development cycles and improve testing reliability. Mockfly’s intuitive dashboard and extensive documentation empower users to simulate complex API behaviors without building full backends, reducing overhead and speeding time‑to‑market.'
 url: https://raw.githubusercontent.com/api-evangelist/mockfly/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:g2-catalog
@@ -11,13 +10,44 @@ specificationVersion: '0.20'
 created: '2026-10-20'
 modified: '2026-10-20'
 tags:
-- Company
-apis: []
+- API Platform
+- Mock APIs
+- Developer Tools
+- Testing
+- CI/CD Integration
+apis:
+  - name: Mockfly Public API
+    description: "Manage Mockfly mock projects, endpoints and responses programmatically."
+    humanURL: https://mockfly.dev/docs/public-api/
+    baseURL: https://api.mockfly.dev
+    openapi:
+      url: openapi/mockfly-openapi.json
+      type: OpenAPI
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DomainSecurity
+  url: security/mockfly-domain-security.yml
 - type: Website
   url: https://mockfly.dev/
+- type: DeveloperPortal
+  url: https://mockfly.dev/
+- type: Documentation
+  url: https://mockfly.dev/docs/
+- type: APIReference
+  url: https://mockfly.dev/public-api/
+- type: GettingStarted
+  url: https://mockfly.dev/articles/getting-started-with-mockfly/
+- type: Pricing
+  url: https://mockfly.dev/pricing/
+- type: Blog
+  url: https://mockfly.dev/articles/
+- type: Support
+  url: https://mockfly.dev/faq/
+
+
+- type: Postman
+  url: https://www.postman.com/organization/mockfly-workspace

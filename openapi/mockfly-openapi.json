@@ -1,0 +1,16 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Mockfly Public API",
+    "version": "1.0.0",
+    "summary": "Manage Mockfly mock projects, endpoints and responses programmatically.",
+    "description": "REST API to manage your [Mockfly](https://mockfly.dev) mock API projects programmatically: create a project from a script, import a whole project from your CI pipeline, or keep your mocks in sync with your codebase without opening the dashboard.\n\nAuthentication uses your **account API key** (`mf_…`), sent as the **raw** value of the `Authorization` header (there is no `Bearer` prefix). The same key covers every operation (projects, endpoints and responses) on every project the account is a member of.\n\nThe API Hub catalog (`GET /hub/catalog`) is completely open and needs no key.\n\n---\n\n**Maintenance note:** this specification is maintained by hand in the [`mockfly-page`](https://github.com/zamarrowski/mockfly-page) repository (`public/openapi.json`); it is not generated from the backend. The functional source of truth is the [Public API documentation](https://mockfly.dev/docs/public-api/), so if the two ever disagree, trust the docs and please [open an issue](https://github.com/zamarrowski/mockfly-page/issues).",
+    "contact": {"name":"Mockfly","url":"https://mockfly.dev/docs/public-api/"},
+    "license": {"name":"Proprietary","url":"https://mockfly.dev/privacy-policy/"}
+  },
+  "externalDocs": {"description":"Public API documentation","url":"https://mockfly.dev/docs/public-api/"},
+  "servers": [{"url":"https://api.mockfly.dev","description":"Production"}],
+  "tags": [],
+  "security": [{"accountApiKey": []}],
+  "paths": {}
+}

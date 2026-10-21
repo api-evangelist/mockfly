@@ -1,0 +1,15 @@
+generated: '2026-10-20'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: mockfly.dev
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Dec 27 10:34:07 2026 GMT
+  hsts: false
+domains:
+- domain: mockfly.dev
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: false

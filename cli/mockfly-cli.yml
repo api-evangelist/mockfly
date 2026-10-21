@@ -1,0 +1,30 @@
+generated: '2026-10-20'
+method: searched
+generator: extract-docs-artifacts.py (local)
+source: https://mockfly.dev/docs/offline-mock-api-cli/
+sources:
+- https://mockfly.dev/docs/offline-mock-api-cli/
+- https://mockfly.dev/docs/import-postman-collection-to-mock-api/
+- https://mockfly.dev/articles/top-5-mock-api-tools/
+- https://mockfly.dev/compare/
+install:
+- method: npx
+  command: npx mockfly-cli
+- method: npm
+  command: npm install -g mockfly-cli
+commands:
+- group: auth
+  commands:
+  - login
+  - whoami
+  - logout
+- group: project
+  commands:
+  - pull
+  - list
+  - rm
+- group: serve
+  commands:
+  - serve
+binary: mockfly
+docs: https://mockfly.dev/docs/offline-mock-api-cli/
