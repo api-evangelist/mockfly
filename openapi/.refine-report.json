@@ -1,0 +1,16 @@
+{
+  "provider": "mockfly",
+  "sources": [
+    "mockfly-openapi.json"
+  ],
+  "outputs": [],
+  "archived": [],
+  "errors": [],
+  "warnings": [
+    "produced no outputs (1 source(s) have no operations) \u2014 sources left in place rather than archived"
+  ],
+  "notes": [
+    "mockfly-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0"
+  ],
+  "skipped": []
+}
