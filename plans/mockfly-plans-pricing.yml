@@ -26,8 +26,8 @@ plans:
   description: Everything in Team, setup done for you, centralized billing, custom seats, integrations, SLA, direct line
 docs: https://mockfly.dev/pricing/
 x-canonical:
-  generated: '2026-10-23'
-  vocabulary: all/0-working/economics/plans-canonical.yml
+  generated: '2026-11-01'
+  vocabulary: engine/economics/plans-canonical.yml
   models:
   - free
   - subscription
